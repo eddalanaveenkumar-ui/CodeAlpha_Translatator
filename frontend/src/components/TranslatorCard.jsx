@@ -21,7 +21,9 @@ export const TranslatorCard = ({
   isSpeakingInput,
   setIsSpeakingInput,
   isSpeakingOutput,
-  setIsSpeakingOutput
+  setIsSpeakingOutput,
+  activeTab,
+  setActiveTab
 }) => {
   
   // Swap source and target languages
@@ -89,9 +91,37 @@ export const TranslatorCard = ({
         </div>
       </div>
 
+      {/* Mobile Tab Switcher */}
+      <div className="flex lg:hidden w-full p-1 rounded-2xl bg-slate-200/50 dark:bg-slate-800/60 border border-slate-200/40 dark:border-slate-700/40 mb-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab('input')}
+          className={`
+            flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200
+            ${activeTab === 'input' 
+              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}
+          `}
+        >
+          Source Text
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('output')}
+          className={`
+            flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200
+            ${activeTab === 'output' 
+              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}
+          `}
+        >
+          Translation
+        </button>
+      </div>
+
       {/* 2. Text Input & Output Grid */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-        <div className="h-full">
+        <div className={`h-full ${activeTab === 'input' ? 'block' : 'hidden lg:block'}`}>
           <TextInput
             text={text}
             onChange={setText}
@@ -102,7 +132,7 @@ export const TranslatorCard = ({
           />
         </div>
         
-        <div className="h-full">
+        <div className={`h-full ${activeTab === 'output' ? 'block' : 'hidden lg:block'}`}>
           <OutputCard
             translatedText={translatedText}
             sourceLang={sourceLang}
@@ -117,10 +147,29 @@ export const TranslatorCard = ({
 
       {/* 3. Action Panel (Translate Trigger) */}
       <div className="flex justify-center pt-2">
-        <PrimaryButton
+        <motion.button
+          whileHover={{ 
+            scale: (loading || !text || text.trim() === '') ? 1 : 1.03,
+            boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)" 
+          }}
+          whileTap={{ scale: (loading || !text || text.trim() === '') ? 1 : 0.97 }}
           onClick={onTranslate}
           disabled={loading || !text || text.trim() === ''}
-          className="w-full sm:w-auto sm:px-12 py-4 shadow-xl shadow-blue-500/10 dark:shadow-blue-500/5"
+          type="button"
+          className="
+            w-full sm:w-auto sm:px-16 py-4 
+            rounded-2xl 
+            font-bold text-sm uppercase tracking-wider
+            text-white 
+            bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 
+            hover:from-blue-500 hover:via-purple-500 hover:to-indigo-500
+            shadow-[0_15px_35px_rgba(59,130,246,0.25)]
+            dark:shadow-[0_15px_35px_rgba(99,102,241,0.15)]
+            focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+            transition-all duration-200 
+            flex items-center justify-center space-x-2.5
+            disabled:opacity-40 disabled:cursor-not-allowed
+          "
         >
           {loading ? (
             <>
@@ -133,7 +182,7 @@ export const TranslatorCard = ({
               <HiOutlineArrowNarrowRight className="w-5 h-5" />
             </>
           )}
-        </PrimaryButton>
+        </motion.button>
       </div>
     </div>
   );

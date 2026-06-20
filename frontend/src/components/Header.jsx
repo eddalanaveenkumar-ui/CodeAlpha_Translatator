@@ -25,27 +25,43 @@ export const Header = () => {
             relative flex items-center justify-center 
             w-11 h-11 
             rounded-2xl 
-            bg-gradient-to-tr from-blue-600 to-indigo-600 
+            bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 
             text-white 
-            shadow-md shadow-blue-500/20
+            shadow-[0_0_20px_rgba(59,130,246,0.4)]
           ">
             {/* Ambient Logo Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl blur-md opacity-30 -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl blur-md opacity-45 -z-10" />
             <HiOutlineTranslate className="w-6 h-6 animate-pulse" />
           </div>
           
           <div className="flex flex-col">
-            <h1 className="
-              text-lg md:text-xl font-bold tracking-tight
-              bg-gradient-to-r from-slate-900 via-blue-600 to-indigo-600 
-              dark:from-white dark:via-blue-400 dark:to-indigo-400 
-              bg-clip-text text-transparent
-            ">
-              Lumina
-            </h1>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 -mt-1">
-              Translator SaaS
-            </span>
+            <div className="flex items-center space-x-2">
+              <h1 className="
+                text-lg md:text-xl font-bold tracking-tight
+                bg-gradient-to-r from-slate-900 via-blue-600 to-indigo-600 
+                dark:from-white dark:via-blue-400 dark:to-indigo-400 
+                bg-clip-text text-transparent
+              ">
+                Lumina Translator
+              </h1>
+              <span className="
+                px-1.5 py-0.5 rounded-md 
+                bg-slate-100 dark:bg-slate-800 
+                text-[9px] font-bold text-slate-500 dark:text-slate-400
+                border border-slate-200/50 dark:border-slate-700/50
+              ">
+                v1.0
+              </span>
+            </div>
+            <div className="flex items-center space-x-1.5 -mt-0.5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                System Online
+              </span>
+            </div>
           </div>
         </div>
 

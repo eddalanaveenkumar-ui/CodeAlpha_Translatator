@@ -36,28 +36,60 @@
 }
 
 @layer utilities {
+  /* Premium Grid Background */
+  .grid-bg {
+    background-image: 
+      linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  
+  .dark .grid-bg {
+    background-image: 
+      linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px);
+  }
+
+  /* Ambient Radial Glow */
+  .radial-glow {
+    background-image: radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.06) 0%, transparent 65%);
+  }
+  
+  .dark .radial-glow {
+    background-image: 
+      radial-gradient(circle at 50% -15%, rgba(59, 130, 246, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 10% 75%, rgba(99, 102, 241, 0.03) 0%, transparent 45%);
+  }
+
   /* Glassmorphism Styles */
   .glass-card {
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(229, 231, 235, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(229, 231, 235, 0.7);
+    box-shadow: 
+      0 10px 30px -10px rgba(148, 163, 184, 0.12),
+      0 1px 3px rgba(148, 163, 184, 0.04);
   }
 
   .dark .glass-card {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(51, 65, 85, 0.55);
+    background: radial-gradient(ellipse at 50% 0%, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 
+      inset 0 1px 1px rgba(255, 255, 255, 0.05),
+      0 20px 40px -15px rgba(0, 0, 0, 0.6),
+      0 0 35px -5px rgba(59, 130, 246, 0.03);
   }
 
   /* Glowing blue accents for premium SaaS look */
   .glow-blue {
-    box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.1);
   }
 
   .dark .glow-blue {
-    box-shadow: 0 0 50px -5px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 50px -5px rgba(59, 130, 246, 0.15);
   }
   
   /* Focus States */

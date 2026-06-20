@@ -10,10 +10,10 @@ export default {
       colors: {
         // Custom light theme colors
         light: {
-          bg: '#F8FAFC',
+          bg: '#F3F6FB',
           card: '#FFFFFF',
           text: '#111827',
-          border: '#E5E7EB',
+          border: '#E4EAF3',
           accent: '#2563EB',
         },
         // Custom dark theme colors

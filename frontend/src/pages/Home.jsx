@@ -15,6 +15,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [provider, setProvider] = useState('');
   const [historyList, setHistoryList] = useState([]);
+  const [activeTab, setActiveTab] = useState('input'); // Mobile tab selector
   
   // Text to Speech states to animate mic/speaker buttons
   const [isSpeakingInput, setIsSpeakingInput] = useState(false);
@@ -64,6 +65,7 @@ export const Home = () => {
 
         setTranslatedText(transResult);
         setProvider(providerName);
+        setActiveTab('output'); // Auto switch focus to output tab on mobile
 
         // Update translation history
         const newHistoryItem = {
@@ -126,6 +128,7 @@ export const Home = () => {
     setTranslatedText(item.translatedText);
     setSourceLang(item.sourceLang);
     setTargetLang(item.targetLang);
+    setActiveTab('output'); // Switch to output so user sees it on mobile
     
     toast.success('Restored translation from history!', {
       icon: '🔄',
@@ -168,32 +171,38 @@ export const Home = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen grid-bg radial-glow">
       <Header />
       
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10 md:py-14 flex flex-col space-y-12">
+      <main className="flex-grow max-w-7xl mx-auto w-full px-6 py-6 md:py-8 flex flex-col space-y-6 md:space-y-8">
         {/* Intro Hero Header */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center max-w-2xl mx-auto space-y-4"
+          className="text-center max-w-2xl mx-auto space-y-3"
         >
           <div className="
-            inline-flex items-center space-x-2 
-            px-3 py-1 rounded-full 
-            bg-blue-500/10 text-blue-600 dark:text-blue-400
-            text-xs font-semibold select-none
+            inline-flex items-center space-x-2.5 
+            px-4 py-1.5 rounded-full 
+            bg-blue-500/10 dark:bg-blue-400/10 
+            text-blue-600 dark:text-blue-400
+            text-[11px] font-bold tracking-wide select-none
+            border border-blue-500/15 dark:border-blue-400/15
+            shadow-[0_2px_12px_rgba(59,130,246,0.06)]
           ">
-            <span>🚀</span>
-            <span>Premium SaaS Translation Tool</span>
+            <span>✨ AI-Powered</span>
+            <span className="opacity-35">•</span>
+            <span>100+ Languages</span>
+            <span className="opacity-35">•</span>
+            <span>Fast & Secure</span>
           </div>
           
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-2xl md:text-3.5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
             Translate Any Language Seamlessly
           </h2>
           
-          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 font-medium">
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-medium max-w-lg mx-auto">
             Powered by Microsoft and Google Cloud translation services. Translate text, listen to pronunciations, and export file archives immediately.
           </p>
         </motion.div>
@@ -219,6 +228,8 @@ export const Home = () => {
             setIsSpeakingInput={setIsSpeakingInput}
             isSpeakingOutput={isSpeakingOutput}
             setIsSpeakingOutput={setIsSpeakingOutput}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
         </motion.div>
 

@@ -1,10 +1,11 @@
-import React from 'react';
-import { FiCopy, FiDownload, FiVolume2 } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiCopy, FiDownload, FiVolume2, FiCheck } from 'react-icons/fi';
 import { IconButton } from './Buttons.jsx';
 import { copyToClipboard } from '../utils/copy.js';
 import { downloadTranslation } from '../utils/download.js';
 import { speakText } from '../utils/speech.js';
 import Loader from './Loader.jsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const OutputCard = ({ 
   translatedText, 
@@ -15,6 +16,8 @@ export const OutputCard = ({
   setIsSpeaking,
   provider
 }) => {
+  const [copied, setCopied] = useState(false);
+
   const handleSpeak = () => {
     speakText(
       translatedText, 
@@ -26,6 +29,14 @@ export const OutputCard = ({
 
   const handleDownload = () => {
     downloadTranslation(translatedText, sourceLang, targetLang);
+  };
+
+  const handleCopy = async () => {
+    const success = await copyToClipboard(translatedText, 'Translation');
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -52,26 +63,35 @@ export const OutputCard = ({
 
       {/* Translation Content */}
       <div className="flex-1 flex flex-col min-h-[220px] md:min-h-[280px]">
-        {translatedText ? (
-          <div className="
-            w-full flex-grow 
-            text-slate-800 dark:text-white 
-            text-base font-normal leading-relaxed
-            overflow-y-auto select-text
-          ">
-            {translatedText}
-          </div>
-        ) : (
-          <div className="
-            w-full flex-grow 
-            text-slate-400 dark:text-slate-500
-            text-base font-normal leading-relaxed
-            flex items-center justify-center select-none
-            text-center
-          ">
-            Translation will appear here...
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {translatedText ? (
+            <motion.div
+              key={translatedText}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="
+                w-full flex-grow 
+                text-slate-800 dark:text-white 
+                text-base font-normal leading-relaxed
+                overflow-y-auto select-text
+              "
+            >
+              {translatedText}
+            </motion.div>
+          ) : (
+            <div className="
+              w-full flex-grow 
+              text-slate-400 dark:text-slate-500
+              text-base font-normal leading-relaxed
+              flex items-center justify-center select-none
+              text-center
+            ">
+              Translation will appear here...
+            </div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Footer / Control Row */}
@@ -88,15 +108,22 @@ export const OutputCard = ({
             title={isSpeaking ? "Stop Speaking" : "Listen to Translation"}
             className={isSpeaking ? "text-blue-500 dark:text-blue-400 bg-blue-500/10" : ""}
           >
-            <FiVolume2 className={`w-4 h-4 ${isSpeaking ? 'animate-bounce' : ''}`} />
+            <FiVolume2 className={`w-5 h-5 ${isSpeaking ? 'animate-pulse text-blue-500' : ''}`} />
           </IconButton>
           
           <IconButton
-            onClick={() => copyToClipboard(translatedText, 'Translation')}
+            onClick={handleCopy}
             disabled={!translatedText || translatedText.trim() === ''}
             title="Copy Translation"
+            className={copied ? "text-emerald-500 dark:text-emerald-400 bg-emerald-500/10" : ""}
           >
-            <FiCopy className="w-4 h-4" />
+            {copied ? (
+              <motion.div initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <FiCheck className="w-5 h-5 text-emerald-500" />
+              </motion.div>
+            ) : (
+              <FiCopy className="w-5 h-5" />
+            )}
           </IconButton>
           
           <IconButton
@@ -104,7 +131,7 @@ export const OutputCard = ({
             disabled={!translatedText || translatedText.trim() === ''}
             title="Download Translation (.txt)"
           >
-            <FiDownload className="w-4 h-4" />
+            <FiDownload className="w-5 h-5" />
           </IconButton>
         </div>
 

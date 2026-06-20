@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
-import { FiCopy, FiTrash2, FiVolume2 } from 'react-icons/fi';
+import React, { useRef, useState } from 'react';
+import { FiCopy, FiTrash2, FiVolume2, FiCheck } from 'react-icons/fi';
 import { IconButton } from './Buttons.jsx';
 import { copyToClipboard } from '../utils/copy.js';
 import { speakText } from '../utils/speech.js';
+import { motion } from 'framer-motion';
 
 export const TextInput = ({ 
   text, 
@@ -13,6 +14,8 @@ export const TextInput = ({
   setIsSpeaking 
 }) => {
   const textareaRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const maxChars = 5000;
 
   const handleTextChange = (e) => {
@@ -48,20 +51,34 @@ export const TextInput = ({
     );
   };
 
+  const handleCopy = async () => {
+    const success = await copyToClipboard(text, 'Source text');
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
-    <div className="
+    <div className={`
       glass-card glow-blue 
       w-full h-full 
       rounded-24px p-6 md:p-7
       flex flex-col 
       transition-all duration-300
-    ">
+      border border-transparent
+      ${isFocused 
+        ? 'ring-2 ring-blue-500/20 dark:ring-blue-400/20 border-blue-500/40 dark:border-blue-400/40 shadow-lg' 
+        : 'hover:border-slate-300/50 dark:hover:border-slate-700/50'}
+    `}>
       <div className="flex-1 flex flex-col min-h-[220px] md:min-h-[280px]">
         <textarea
           ref={textareaRef}
           value={text}
           onChange={handleTextChange}
           onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           placeholder="Enter text to translate..."
           maxLength={maxChars}
           className="
@@ -90,15 +107,22 @@ export const TextInput = ({
             title={isSpeaking ? "Stop Speaking" : "Listen to Input"}
             className={isSpeaking ? "text-blue-500 dark:text-blue-400 bg-blue-500/10" : ""}
           >
-            <FiVolume2 className={`w-4 h-4 ${isSpeaking ? 'animate-bounce' : ''}`} />
+            <FiVolume2 className={`w-5 h-5 ${isSpeaking ? 'animate-pulse text-blue-500' : ''}`} />
           </IconButton>
           
           <IconButton
-            onClick={() => copyToClipboard(text, 'Source text')}
+            onClick={handleCopy}
             disabled={!text || text.trim() === ''}
             title="Copy Original Text"
+            className={copied ? "text-emerald-500 dark:text-emerald-400 bg-emerald-500/10" : ""}
           >
-            <FiCopy className="w-4 h-4" />
+            {copied ? (
+              <motion.div initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <FiCheck className="w-5 h-5 text-emerald-500" />
+              </motion.div>
+            ) : (
+              <FiCopy className="w-5 h-5" />
+            )}
           </IconButton>
           
           <IconButton
@@ -106,7 +130,7 @@ export const TextInput = ({
             disabled={!text || text.trim() === ''}
             title="Clear Text"
           >
-            <FiTrash2 className="w-4 h-4 hover:text-red-500" />
+            <FiTrash2 className="w-5 h-5 hover:text-red-500" />
           </IconButton>
         </div>
 

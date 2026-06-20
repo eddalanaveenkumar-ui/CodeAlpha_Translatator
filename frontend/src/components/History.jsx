@@ -11,10 +11,21 @@ export const History = ({ historyList, onRestore, onClearAll, onDeleteItem }) =>
         glass-card glow-blue 
         p-8 rounded-24px text-center 
         transition-all duration-300
+        flex flex-col items-center justify-center space-y-3.5
       ">
-        <FiClock className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">No translation history</h3>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Your recent translations will be saved here.</p>
+        <motion.div
+          animate={{ rotate: [0, 6, -6, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="text-4xl select-none"
+        >
+          🕘
+        </motion.div>
+        <div>
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">No translations yet</h3>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-[220px] mx-auto leading-relaxed">
+            Translate something to build your history log.
+          </p>
+        </div>
       </div>
     );
   }
